@@ -56,7 +56,7 @@ const AboutSection = (props) => {
                 <span className="px-1 italic">Eric Thomas</span>
             </h1>
             <motion.p
-                className="text-lg text-gray-600 mt-4"
+                className="text-lg text-gray-600 mt-4 max-w-sm"
                 initial={{
                     opacity: 0,
                     y: 25,
@@ -70,9 +70,9 @@ const AboutSection = (props) => {
                     delay: 1.5,
                 }}
             >
-                I make YouTube videos to help developers
+                My life starts with '<strong>C</strong>', ends with '<strong>E</strong>', with '<strong>O</strong>' and '<strong>D</strong>' in the middle.
                 <br />
-                learn how to build 3D apps
+                A Full-stack Developer with 9+ years of diverse industry experience, crafting seamless, high-performance applications from concept to deployment. Passionate about clean, efficient code, I hold a Bachelor's degree from Franklin University and thrive on solving complex challenges in both front-end and back-end development.
             </motion.p>
             <motion.button
                 onClick={() => setSection(3)}
@@ -240,112 +240,113 @@ const ProjectsSection = () => {
     );
 };
 
-const ContactSection = () => {const [formStatus, setFormStatus] = useState({
-    submitted: false,
-    submitting: false,
-    error: null,
-  });
+const ContactSection = () => {
+    const [formStatus, setFormStatus] = useState({
+        submitted: false,
+        submitting: false,
+        error: null,
+    });
 
-  const sendEmail = async (e) => {
-    e.preventDefault();
+    const sendEmail = async (e) => {
+        e.preventDefault();
 
-    // Start form submission
-    setFormStatus({ submitting: true, submitted: false, error: null });
+        // Start form submission
+        setFormStatus({ submitting: true, submitted: false, error: null });
 
-    // EmailJS submission
-    try {
-      await emailjs.sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,  
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, 
-        e.target,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY   
-      );
+        // EmailJS submission
+        try {
+            await emailjs.sendForm(
+                import.meta.env.VITE_EMAILJS_SERVICE_ID,
+                import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+                e.target,
+                import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+            );
 
-      // Prepare message for Telegram
-      const message = `
+            // Prepare message for Telegram
+            const message = `
         New contact form submission:
         Name: ${e.target.name.value}
         Email: ${e.target.email.value}
         Message: ${e.target.message.value}
       `;
 
-      // Send message to Telegram
-      await axios.post(
-        `https://api.telegram.org/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/sendMessage`,
-        {
-          chat_id: import.meta.env.VITE_TELEGRAM_CHAT_ID,
-          text: message,
+            // Send message to Telegram
+            await axios.post(
+                `https://api.telegram.org/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/sendMessage`,
+                {
+                    chat_id: import.meta.env.VITE_TELEGRAM_CHAT_ID,
+                    text: message,
+                }
+            );
+
+            // If both requests are successful
+            setFormStatus({ submitted: true, submitting: false, error: null });
+        } catch (error) {
+            console.log(error);
+            setFormStatus({ submitted: false, submitting: false, error: error.message });
         }
-      );
 
-      // If both requests are successful
-      setFormStatus({ submitted: true, submitting: false, error: null });
-    } catch (error) {
-      console.log(error);
-      setFormStatus({ submitted: false, submitting: false, error: error.message });
-    }
+        e.target.reset(); // Reset form after submission
+    };
 
-    e.target.reset(); // Reset form after submission
-  };
-
-  return (
-    <Section>
-      <h2 className="text-3xl md:text-5xl font-bold">Contact me</h2>
-      <div className="mt-8 p-8 rounded-md bg-white bg-opacity-50 w-96 max-w-full">
-        {formStatus.submitted ? (
-          <p className="text-gray-900 text-center">Thanks for your message!</p>
-        ) : (
-          <form onSubmit={sendEmail}>
-            <label htmlFor="name" className="font-medium text-gray-900 block mb-1">
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              id="name"
-              required
-              className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-            />
-            <label
-              htmlFor="email"
-              className="font-medium text-gray-900 block mb-1 mt-8"
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              required
-              className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-            />
-            <label
-              htmlFor="message"
-              className="font-medium text-gray-900 block mb-1 mt-8"
-            >
-              Message
-            </label>
-            <textarea
-              name="message"
-              id="message"
-              required
-              className="h-32 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-            />
-            <button
-              disabled={formStatus.submitting}
-              className={`w-full h-12 mt-8 text-white bg-indigo-600 font-bold rounded-md transition-colors hover:bg-indigo-700 disabled:opacity-75 disabled:bg-gray-600`}
-            >
-              {formStatus.submitting ? "Sending..." : "Send message"}
-            </button>
-          </form>
-        )}
-        {formStatus.error && (
-          <p className="text-red-500 text-center mt-4">
-            Failed to send message: {formStatus.error}
-          </p>
-        )}
-      </div>
-    </Section>
-  );
+    return (
+        <Section>
+            <h2 className="text-3xl md:text-5xl font-bold">Contact me</h2>
+            <div className="mt-8 p-8 rounded-md bg-white bg-opacity-50 w-96 max-w-full">
+                {formStatus.submitted ? (
+                    <p className="text-gray-900 text-center">Thanks for your message!</p>
+                ) : (
+                    <form onSubmit={sendEmail}>
+                        <label htmlFor="name" className="font-medium text-gray-900 block mb-1">
+                            Name
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            id="name"
+                            required
+                            className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+                        />
+                        <label
+                            htmlFor="email"
+                            className="font-medium text-gray-900 block mb-1 mt-8"
+                        >
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            required
+                            className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+                        />
+                        <label
+                            htmlFor="message"
+                            className="font-medium text-gray-900 block mb-1 mt-8"
+                        >
+                            Message
+                        </label>
+                        <textarea
+                            name="message"
+                            id="message"
+                            required
+                            className="h-32 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+                        />
+                        <button
+                            disabled={formStatus.submitting}
+                            className={`w-full h-12 mt-8 text-white bg-indigo-600 font-bold rounded-md transition-colors hover:bg-indigo-700 disabled:opacity-75 disabled:bg-gray-600`}
+                        >
+                            {formStatus.submitting ? "Sending..." : "Send message"}
+                        </button>
+                    </form>
+                )}
+                {formStatus.error && (
+                    <p className="text-red-500 text-center mt-4">
+                        Failed to send message: {formStatus.error}
+                    </p>
+                )}
+            </div>
+        </Section>
+    );
 };
 
