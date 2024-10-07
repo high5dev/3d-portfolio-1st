@@ -94,139 +94,114 @@ const AboutSection = (props) => {
   );
 };
 
-const skills = [
-  {
-    title: "Threejs / React Three Fiber",
-    level: 80,
-  },
-  {
-    title: "React / React Native",
-    level: 90,
-  },
-  {
-    title: "Angular",
-    level: 90,
-  },
-  {
-    title: "Nodejs",
-    level: 90,
-  },
-  {
-    title: "Typescript",
-    level: 60,
-  },
-  {
-    title: "3D Modeling",
-    level: 40,
-  },
-];
-const languages = [
-  {
-    title: "🇫🇷 French",
-    level: 100,
-  },
-  {
-    title: "zh Chinese",
-    level: 80,
-  },
-];
+const skillCategories = {
+  languages: [
+    { title: "JavaScript", level: 95 },
+    { title: "TypeScript", level: 85 },
+    { title: "Python", level: 60 },
+    { title: "HTML/CSS", level: 97.5 },
+    { title: "PHP", level: 90 },
+    { title: "C#", level: 90 },
+    { title: "Ruby", level: 90 },
+  ],
+  frameworks: [
+    { title: "React / React Native", level: 90 },
+    { title: "Angular", level: 90 },
+    { title: "Next.js", level: 80 },
+    { title: "NodeJS", level: 60 },
+    { title: "ExpressJS", level: 60 },
+    { title: "ElectronJS", level: 60 },
+    { title: "Django", level: 60 },
+    { title: "Tailwind CSS", level: 50 },
+    { title: "Bootstrap", level: 50 },
+    { title: "Laravel", level: 50 },
+    { title: "WordPress", level: 50 },
+    { title: "ASP.NET", level: 50 },
+    { title: "Ruby on Rails", level: 50 },
+  ],
+  databases: [
+    { title: "MySQL", level: 75 },
+    { title: "MongoDB", level: 60 },
+    { title: "PostgreSQL", level: 50 },
+    { title: "SQLite", level: 50 },
+    { title: "Redis", level: 30 },
+  ],
+  tools: [
+    { title: "Git / GitHub", level: 85 },
+    { title: "Docker", level: 70 },
+    { title: "Kuebernetes", level: 60 },
+    { title: "AWS", level: 60 },
+    { title: "CentOS", level: 60 },
+    { title: "Ubuntu", level: 60 },
+    { title: "RedHat", level: 60 },
+    { title: "Vite", level: 60 },
+    { title: "Webpack", level: 60 },
+  ],
+  others: [
+    { title: "Performance Optimization", level: 40 },
+    { title: "Mobile-Responsive Development", level: 50 },
+    { title: "Payment Processing", level: 40 },
+    { title: "Pixel Perfect Implementation", level: 40 },
+  ],
+};
 
 const SkillsSection = () => {
   return (
     <Section>
       <motion.div className="w-full" whileInView={"visible"}>
         <h2 className="text-3xl md:text-5xl font-bold text-white">Skills</h2>
-        <div className="mt-8 space-y-4">
-          {skills.map((skill, index) => (
-            <div className="w-full md:w-64" key={index}>
-              <motion.h3
-                className="text-lg md:text-xl font-bold text-gray-100"
-                initial={{
-                  opacity: 0,
-                }}
-                variants={{
-                  visible: {
-                    opacity: 1,
-                    transition: {
-                      duration: 1,
-                      delay: 1 + index * 0.2,
-                    },
-                  },
-                }}
-              >
-                {skill.title}
-              </motion.h3>
-              <div className="h-2 w-full bg-gray-200 rounded-full mt-2">
-                <motion.div
-                  className="h-full bg-indigo-500 rounded-full "
-                  style={{ width: `${skill.level}%` }}
-                  initial={{
-                    scaleX: 0,
-                    originX: 0,
-                  }}
-                  variants={{
-                    visible: {
-                      scaleX: 1,
-                      transition: {
-                        duration: 1,
-                        delay: 1 + index * 0.2,
-                      },
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-        <div>
-          <h2 className="text-3xl md:text-5xl font-bold mt-10 text-white">
-            Languages
-          </h2>
-          <div className="mt-8 space-y-4">
-            {languages.map((lng, index) => (
-              <div className="w-full md:w-64" key={index}>
-                <motion.h3
-                  className="text-lg md:text-xl font-bold text-gray-100"
-                  initial={{
-                    opacity: 0,
-                  }}
-                  variants={{
-                    visible: {
-                      opacity: 1,
-                      transition: {
-                        duration: 1,
-                        delay: 2 + index * 0.2,
-                      },
-                    },
-                  }}
-                >
-                  {lng.title}
-                </motion.h3>
-                <div className="h-2 w-full bg-gray-200 rounded-full mt-2">
-                  <motion.div
-                    className="h-full bg-indigo-500 rounded-full "
-                    style={{ width: `${lng.level}%` }}
-                    initial={{
-                      scaleX: 0,
-                      originX: 0,
-                    }}
-                    variants={{
-                      visible: {
-                        scaleX: 1,
-                        transition: {
-                          duration: 1,
-                          delay: 2 + index * 0.2,
-                        },
-                      },
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-5 gap-8">
+          {/* Languages */}
+          <SkillCategory title="Languages" skills={skillCategories.languages} />
+          {/* Frameworks */}
+          <SkillCategory title="Frameworks" skills={skillCategories.frameworks} />
+          {/* Databases */}
+          <SkillCategory title="Databases" skills={skillCategories.databases} />
+          {/* Tools */}
+          <SkillCategory title="Tools" skills={skillCategories.tools} />
+          {/* Others */}
+          <SkillCategory title="Others" skills={skillCategories.others} />
         </div>
       </motion.div>
     </Section>
+  );
+};
+
+// Skill Category Component
+const SkillCategory = ({ title, skills }) => {
+  return (
+    <div>
+      <h3 className="text-2xl font-bold text-gray-100 mb-4">{title}</h3>
+      {skills.map((skill, index) => (
+        <div className="w-full" key={index}>
+          <motion.h4
+            className="text-lg font-bold text-gray-100"
+            initial={{ opacity: 0 }}
+            variants={{
+              visible: {
+                opacity: 1,
+                transition: { duration: 1, delay: 1 + index * 0.2 },
+              },
+            }}
+          >
+            {skill.title}
+          </motion.h4>
+          <div className="h-2 w-full bg-gray-200 rounded-full mt-2">
+            <motion.div
+              className="h-full bg-indigo-500 rounded-full"
+              style={{ width: `${skill.level}%` }}
+              initial={{ scaleX: 0, originX: 0 }}
+              variants={{
+                visible: {
+                  scaleX: 1,
+                  transition: { duration: 1, delay: 1 + index * 0.2 },
+                },
+              }}
+            />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 };
 
@@ -316,9 +291,9 @@ const ContactSection = () => {
             />
             <button
               disabled={state.submitting}
-              className="bg-indigo-600 text-white py-4 px-8 rounded-lg font-bold text-lg mt-16 "
+              className={`w-full h-12 mt-8 text-white bg-indigo-600 font-bold rounded-md transition-colors hover:bg-indigo-700 disabled:opacity-75 disabled:bg-gray-600`}
             >
-              Submit
+              Send message
             </button>
           </form>
         )}
