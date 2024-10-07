@@ -1,4 +1,6 @@
 import { ValidationError, useForm } from "@formspree/react";
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { currentProjectAtom, projects } from "./Projects";
@@ -238,67 +240,98 @@ const ProjectsSection = () => {
 };
 
 const ContactSection = () => {
-    const [state, handleSubmit] = useForm("mayzgjbd");
-    return (
-        <Section>
-            <h2 className="text-3xl md:text-5xl font-bold">Contact me</h2>
-            <div className="mt-8 p-8 rounded-md bg-white bg-opacity-50 w-96 max-w-full">
-                {state.succeeded ? (
-                    <p className="text-gray-900 text-center">Thanks for your message !</p>
-                ) : (
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="name" className="font-medium text-gray-900 block mb-1">
-                            Name
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            id="name"
-                            className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-                        />
-                        <label
-                            htmlFor="email"
-                            className="font-medium text-gray-900 block mb-1 mt-8"
-                        >
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-                        />
-                        <ValidationError
-                            className="mt-1 text-red-500"
-                            prefix="Email"
-                            field="email"
-                            errors={state.errors}
-                        />
-                        <label
-                            htmlFor="email"
-                            className="font-medium text-gray-900 block mb-1 mt-8"
-                        >
-                            Message
-                        </label>
-                        <textarea
-                            name="message"
-                            id="message"
-                            className="h-32 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
-                        />
-                        <ValidationError
-                            className="mt-1 text-red-500"
-                            errors={state.errors}
-                        />
-                        <button
-                            disabled={state.submitting}
-                            className={`w-full h-12 mt-8 text-white bg-indigo-600 font-bold rounded-md transition-colors hover:bg-indigo-700 disabled:opacity-75 disabled:bg-gray-600`}
-                        >
-                            Send message
-                        </button>
-                    </form>
-                )}
-            </div>
-        </Section>
-    );
+    // State to handle form submission status
+  const [formStatus, setFormStatus] = useState({
+    submitted: false,
+    submitting: false,
+    error: null,
+  });
+
+  const sendEmail = (e) => {
+    e.preventDefault(); // Prevent page reload
+
+    // Start form submission
+    setFormStatus({ submitting: true, submitted: false, error: null });
+
+    emailjs
+      .sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID, // Replace with your EmailJS service ID
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Replace with your EmailJS template ID
+        e.target,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY // Replace with your EmailJS public key
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setFormStatus({ submitted: true, submitting: false, error: null });
+        },
+        (error) => {
+          console.log(error.text);
+          setFormStatus({ submitted: false, submitting: false, error: error.text });
+        }
+      );
+
+    e.target.reset(); // Reset form after submission
+  };
+
+  return (
+    <Section>
+      <h2 className="text-3xl md:text-5xl font-bold">Contact me</h2>
+      <div className="mt-8 p-8 rounded-md bg-white bg-opacity-50 w-96 max-w-full">
+        {formStatus.submitted ? (
+          <p className="text-gray-900 text-center">Thanks for your message!</p>
+        ) : (
+          <form onSubmit={sendEmail}>
+            <label htmlFor="name" className="font-medium text-gray-900 block mb-1">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              required
+              className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+            />
+            <label
+              htmlFor="email"
+              className="font-medium text-gray-900 block mb-1 mt-8"
+            >
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              required
+              className="block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+            />
+            <label
+              htmlFor="message"
+              className="font-medium text-gray-900 block mb-1 mt-8"
+            >
+              Message
+            </label>
+            <textarea
+              name="message"
+              id="message"
+              required
+              className="h-32 block w-full rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 p-3"
+            />
+            <button
+              disabled={formStatus.submitting}
+              className={`w-full h-12 mt-8 text-white bg-indigo-600 font-bold rounded-md transition-colors hover:bg-indigo-700 disabled:opacity-75 disabled:bg-gray-600`}
+            >
+              {formStatus.submitting ? "Sending..." : "Send message"}
+            </button>
+          </form>
+        )}
+        {formStatus.error && (
+          <p className="text-red-500 text-center mt-4">
+            Failed to send message: {formStatus.error}
+          </p>
+        )}
+      </div>
+    </Section>
+  );
 };
 
