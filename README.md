@@ -1,10 +1,5 @@
-# r3f-vite-starter
-A boilerplate to build R3F projects
 
-```
-yarn
-yarn dev
-```
+![Thumbnail Video Tutorial](https://github.com/wass08/r3f-portfolio-responsive/assets/6551176/bf148f55-e6ba-46c4-b53d-9f93e1d1f99f)
 
+[Video tutorial](https://youtube.com/@WawaSensei)
 
-![image](https://user-images.githubusercontent.com/6551176/221732091-23ee52cb-4150-42fa-b998-43628d7a6b0d.png)
