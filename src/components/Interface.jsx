@@ -1,6 +1,7 @@
 import { ValidationError, useForm } from "@formspree/react";
 import { useState } from "react";
 import emailjs from "@emailjs/browser";
+import axios from "axios";
 import { motion } from "framer-motion";
 import { useAtom } from "jotai";
 import { currentProjectAtom, projects } from "./Projects";
@@ -239,37 +240,50 @@ const ProjectsSection = () => {
     );
 };
 
-const ContactSection = () => {
-    // State to handle form submission status
-  const [formStatus, setFormStatus] = useState({
+const ContactSection = () => {const [formStatus, setFormStatus] = useState({
     submitted: false,
     submitting: false,
     error: null,
   });
 
-  const sendEmail = (e) => {
-    e.preventDefault(); // Prevent page reload
+  const sendEmail = async (e) => {
+    e.preventDefault();
 
     // Start form submission
     setFormStatus({ submitting: true, submitted: false, error: null });
 
-    emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID, // Replace with your EmailJS service ID
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Replace with your EmailJS template ID
+    // EmailJS submission
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,  
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, 
         e.target,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY // Replace with your EmailJS public key
-      )
-      .then(
-        (result) => {
-          console.log(result.text);
-          setFormStatus({ submitted: true, submitting: false, error: null });
-        },
-        (error) => {
-          console.log(error.text);
-          setFormStatus({ submitted: false, submitting: false, error: error.text });
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY   
+      );
+
+      // Prepare message for Telegram
+      const message = `
+        New contact form submission:
+        Name: ${e.target.name.value}
+        Email: ${e.target.email.value}
+        Message: ${e.target.message.value}
+      `;
+
+      // Send message to Telegram
+      await axios.post(
+        `https://api.telegram.org/bot${import.meta.env.VITE_TELEGRAM_BOT_TOKEN}/sendMessage`,
+        {
+          chat_id: import.meta.env.VITE_TELEGRAM_CHAT_ID,
+          text: message,
         }
       );
+
+      // If both requests are successful
+      setFormStatus({ submitted: true, submitting: false, error: null });
+    } catch (error) {
+      console.log(error);
+      setFormStatus({ submitted: false, submitting: false, error: error.message });
+    }
 
     e.target.reset(); // Reset form after submission
   };
