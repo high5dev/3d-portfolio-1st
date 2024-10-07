@@ -50,7 +50,7 @@ const AboutSection = (props) => {
       <h1 className="text-4xl md:text-6xl font-extrabold leading-snug mt-8 md:mt-0">
         Hi, I'm
         <br />
-        <span className="bg-white px-1 italic">Cory Mack</span>
+        <span className="px-1 italic">Eric Thomas</span>
       </h1>
       <motion.p
         className="text-lg text-gray-600 mt-4"
@@ -104,6 +104,10 @@ const skills = [
     level: 90,
   },
   {
+    title: "Angular",
+    level: 90,
+  },
+  {
     title: "Nodejs",
     level: 90,
   },
@@ -122,12 +126,8 @@ const languages = [
     level: 100,
   },
   {
-    title: "🇺🇸 English",
+    title: "zh Chinese",
     level: 80,
-  },
-  {
-    title: "🇯🇵 Japanese",
-    level: 20,
   },
 ];
 
