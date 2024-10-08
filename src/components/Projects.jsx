@@ -8,8 +8,8 @@ import { useEffect, useRef } from "react";
 
 export const projects = [
   {
-    title: "Wawatmos",
-    url: "https://r3f-wawatmos-final.vercel.app/",
+    title: "FlightPath360",
+    url: "https://flight-path360.vercel.app/",
     image: "projects/wawatmos.jpg",
     description: "Recreating the Atmos Awwwards website with React Three Fiber",
   },
