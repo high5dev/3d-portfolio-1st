@@ -10,7 +10,7 @@ export const projects = [
   {
     title: "FlightPath360",
     url: "https://flight-path360.vercel.app/",
-    image: "projects/wawatmos.jpg",
+    image: "projects/flighpath360.jpg",
     description: "Recreating the Atmos Awwwards website with React Three Fiber",
   },
   {
